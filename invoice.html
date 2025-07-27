@@ -1,0 +1,60 @@
+<!-- invoice.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul>
+                <li><a href="customer_home.html">Home</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Invoice</h2>
+        <div id="invoiceDetails">
+            <p><strong>Receiver Name:</strong> <span id="invReceiverName"></span></p>
+            <p><strong>Receiver Address:</strong> <span id="invReceiverAddress"></span></p>
+            <p><strong>Receiver Pin:</strong> <span id="invReceiverPin"></span></p>
+            <p><strong>Receiver Mobile:</strong> <span id="invReceiverMobile"></span></p>
+            <p><strong>Parcel Weight (g):</strong> <span id="invWeight"></span></p>
+            <p><strong>Parcel Contents Description:</strong> <span id="invContents"></span></p>
+            <p><strong>Parcel Delivery Type:</strong> <span id="invDeliveryType"></span></p>
+            <p><strong>Parcel Packaging:</strong> <span id="invPackaging"></span></p>
+            <p><strong>Pickup Time:</strong> <span id="invPickupTime"></span></p>
+            <p><strong>Parcel Service Cost:</strong><span id="invServiceCost"></span></p>
+            <p><strong>Booking ID:</strong> <span id="bookingId"></span></p>
+        </div>
+
+        <button onclick="window.print()">Print Invoice</button>
+    </main>
+
+    <script>
+        window.onload = function () {
+
+            document.getElementById("invReceiverName").textContent = localStorage.getItem("invReceiverName") || "-";
+            document.getElementById("invReceiverAddress").textContent = localStorage.getItem("invReceiverAddress") || "-";
+            document.getElementById("invReceiverPin").textContent = localStorage.getItem("invReceiverPin") || "-";
+            document.getElementById("invReceiverMobile").textContent = localStorage.getItem("invReceiverMobile") || "-";
+            document.getElementById("invWeight").textContent = localStorage.getItem("invWeight") || "-";
+            document.getElementById("invContents").textContent = localStorage.getItem("invContents") || "-";
+            document.getElementById("invDeliveryType").textContent = localStorage.getItem("invDeliveryType") || "-";
+            document.getElementById("invPackaging").textContent = localStorage.getItem("invPackaging") || "-";
+            document.getElementById("invPickupTime").textContent = localStorage.getItem("invPickupTime") || "-";
+            document.getElementById("invServiceCost").textContent = localStorage.getItem("invServiceCost") || "-";
+            document.getElementById("bookingId").textContent = localStorage.getItem("bookingId") || "-";
+            
+        };
+    </script>
+</body>
+</html>
+<!-- invoice.html -->

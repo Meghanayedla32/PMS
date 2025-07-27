@@ -1,0 +1,44 @@
+<!-- support.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul>
+                <li><a href="customer_home.html">Home</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Support & Help</h2>
+        <form id="supportForm">
+            <label for="issueType">Issue Type:</label>
+            <select id="issueType" required>
+                <option value="">Select</option>
+                <option value="Booking Issue">Booking Issue</option>
+                <option value="Payment Issue">Payment Issue</option>
+                <option value="Tracking Issue">Tracking Issue</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <label for="issueDescription">Describe Your Issue:</label>
+            <textarea id="issueDescription" rows="5" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+
+        <div id="supportMessage"></div>
+    </main>
+</body>
+</html>
+<!-- support.html -->

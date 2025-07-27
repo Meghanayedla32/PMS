@@ -1,0 +1,85 @@
+<!-- payment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        li a{
+            color: black !important;
+        }
+        main{
+            display: block;
+            width: 400px;
+            height: 500px;
+        }
+        form{
+            font-family: Arial, sans-serif;
+            background-color: #eef2f5;
+            display: block;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Payment</h2>
+        <form id="paymentForm">
+            <label for="billAmount">Bill Amount:</label>
+            <input type="text" id="billAmount" readonly>
+
+            <label for="paymentMode">Mode of Payment:</label>
+            <select id="paymentMode" required>
+                <option value="">Select</option>
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>
+            </select>
+
+            <button type="button" onclick="goToCardDetails()">Pay Now</button>
+            <button type="button" onclick="window.location.href='booking.html'">Back to Booking</button>
+        </form>
+    </main>
+    <script>
+        
+        window.onload = function () {
+            const amount = localStorage.getItem("billAmount");
+            if (amount) {
+                document.getElementById("billAmount").value = amount;
+            } else {
+                document.getElementById("billAmount").value = "Not Found";
+            }
+        };
+        function goToCardDetails() {
+            const method = document.getElementById("paymentMode").value;
+
+            if (!method) {
+                alert("Please select a payment method.");
+                return;
+            }
+            localStorage.setItem("card", method); 
+            if (method === "Credit") {
+                window.location.href = "card_details.html";
+            } else if (method === "Debit") {
+                window.location.href = "card_details.html";
+            }
+        }
+    </script>
+</body>
+</html>
+
+<!-- payment.html -->

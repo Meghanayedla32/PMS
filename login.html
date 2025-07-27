@@ -1,0 +1,85 @@
+<!-- Login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parcel Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #eef2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+                <label for="role">Select Role:</label>
+                <select id="role">
+                <option value="customer">Customer</option>
+                <option value="officer">Officer</option>
+                </select>
+
+                <label for="userId">User Name:</label>
+                <input type="text" id="userId" minlength="5" maxlength="20" required />
+                <div id="userIdError" class="error"></div>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" maxlength="30" required />
+                <div id="passwordError" class="error"></div>
+
+                <button type="button" class="btn" onclick="validateLogin()">Login</button>
+        </form>
+
+        <p>Don't have an account? <a href="register.html">Register</a></p>
+    </div>
+    <script>
+    function validateLogin() {
+      const userId = document.getElementById('userId').value.trim();
+      const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
+      localStorage.setItem("username", userId); 
+      let valid = true;
+
+      const userIdError = document.getElementById('userIdError');
+      const passwordError = document.getElementById('passwordError');
+
+      userIdError.textContent = '';
+      passwordError.textContent = '';
+
+      if (userId.length < 5 || userId.length > 20) {
+        userIdError.textContent = 'User ID must be between 5 and 20 characters.';
+        valid = false;
+      }
+
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{6,30}$/;
+      if (!passwordRegex.test(password)) {
+        passwordError.textContent = 'Password must include uppercase, lowercase, and special character.';
+        valid = false;
+      }
+
+      if (valid) {
+        console.log("Login successful. Redirecting...");
+        if (role === 'customer') {
+          window.location.href = 'customer_home.html';
+        } else {
+          window.location.href = 'officer_home.html';
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
+<!-- Login.html -->

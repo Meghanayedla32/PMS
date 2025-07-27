@@ -1,0 +1,268 @@
+<!-- booking.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Service - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        nav ul li a{
+            color: black !important;
+        }
+        .check{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+        }
+        #insurance{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+        }
+        #tracking{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul>
+                <li><a href="customer_home.html">Home</a></li>
+                <li><a href="booking.html">Booking Service</a></li>
+                <li><a href="tracking.html">Tracking</a></li>
+                <li><a href="history.html">Previous Booking</a></li>
+                <li><a href="support.html">Contact Support</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2>Parcel Booking</h2>
+        <form id="bookingForm">
+            <fieldset>
+                <legend>Sender Information</legend>
+                <label for="senderName">Name</label>
+                <input type="text" id="senderName" readonly class="readonly">
+
+                <label for="senderAddress">Address</label>
+                <textarea id="senderAddress" readonly class="readonly"></textarea>
+
+                <label for="senderContact">Contact</label>
+                <input type="text" id="senderContact" readonly class="readonly">
+            </fieldset>
+
+            <fieldset>
+                 <legend>Receiver Information</legend>
+                <label for="receiverName">Name</label>
+                <input type="text" id="receiverName" required>
+
+                <label for="receiverAddress">Address</label>
+                <textarea id="receiverAddress" required></textarea>
+
+                <label for="receiverPin">Pin Code</label>
+                <input type="text" id="receiverPin" pattern="\d{6}" required>
+
+                <label for="receiverContact">Contact</label>
+                <input type="text" id="receiverContact" pattern="\d{10}" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Parcel Details</legend>
+                <label for="parcelSize">Size and Weight</label>
+                <select id="parcelSize" required>
+                    <option value="">--Select--</option>
+                    <option value="small">small</option>
+                    <option value="medium">medium</option>
+                    <option value="large">large</option>
+
+                </select>
+
+                <label for="contentDesc">Contents Description</label>
+                <textarea id="contentDesc" required></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>Shipping Options</legend>
+                <label for="deliverySpeed">Delivery Speed</label>
+                <select id="deliverySpeed" required>
+                    <option value="">--Select--</option>
+                    <option value="standard">Standard</option>
+                    <option value="express">Express</option>
+                </select>
+
+                <label for="packaging">Packaging Preferences</label>
+                <select id="packaging" required>
+                    <option value="">--Select--</option>
+                    <option value="Standard Packaging">Standard Packaging</option>
+                    <option value="Custom Packaging">Custom Packaging</option>
+                    <option value="Eco-friendly Packaging">Eco-friendly Packaging</option>
+                    <option value="Fragile Item Handling">Fragile Item Handling</option>
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <legend>Date and Time</legend>
+                <label for="pickupDate">Pickup</label>
+                <input type="date" id="pickupDate" name="pickupDate" required>
+
+                <label for="pickupTime">Pickup Time</label>
+                <select id="pickupTime" required>
+                    <option value="">--Select--</option>
+                    <option value="06:00AM to 09:00PM">06:00AM to 09:00PM</option>
+                    <option value="09:00AM to 12:00PM">09:00AM to 12:00PM</option>
+                    <option value="1:00PM to 4:00PM">1:00PM to 4:00PM</option>
+                    <option value="4:00PM to 6:00PM">4:00PM to 6:00PM</option>
+                    <option value="6:00PM to 10:00PM">6:00PM to 10:00PM</option>
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <label for="cost">Estimated Cost</label>
+                <input type="text" id="cost" readonly class="readonly">
+
+                <label for="paymentMethod">Payment Method</label>
+                <select id="paymentMethod" required>
+                    <option value="">--Select--</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="cod">Cash on Delivery</option>
+                </select>
+            </fieldset>
+
+            <fieldset>
+                <legend >Additional Services</legend>
+                <div class="check">
+                <label><input type="checkbox" id="insurance"> Add Insurance</label>
+                <label><input type="checkbox" id="tracking"> Enable Tracking</label>
+                </div>
+            </fieldset>
+
+
+            <button type="button" onclick="proceedToPayment()">Submit Booking</button>
+        </form>
+    </main>
+    <script>
+        
+        function proceedToPayment() {
+            const method = document.getElementById("paymentMethod").value;
+            saveBookingDetails();
+
+            if (!method) {
+                alert("Please select a payment method.");
+                return;
+            }
+
+            if (method === "card") {
+                window.location.href = "payment.html";
+            } else if (method === "cod") {
+                window.location.href = "invoice.html";
+            }
+        }
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById("pickupDate").setAttribute('min', today);
+    
+        // Example of populating sender info from localStorage or dummy data
+        document.getElementById('senderName').value = "charlie";
+        document.getElementById('senderAddress').value = "123, default Street, Metro City, 533101";
+        document.getElementById('senderContact').value = "9876543210";
+
+        // Dynamically calculate cost 
+        document.getElementById('deliverySpeed').addEventListener('change', function () {
+
+            // Assuming total cost is calculated based on form selections:
+            const parcelSize = document.getElementById("parcelSize").value;
+            const shippingOption = document.getElementById("deliverySpeed").value;
+            
+            let amount = 0;
+            if (parcelSize === "small") amount += 100;
+            else if (parcelSize === "medium") amount += 200;
+            else if (parcelSize === "large") amount += 300;
+
+            if (shippingOption === "express") amount += 150;
+            else if (shippingOption === "standard") amount += 50;
+            
+            document.getElementById('cost').value = `Rs. ${amount}`;
+
+            // Store in localStorage
+            // localStorage.setItem("billAmount", amount);
+            
+        });
+        
+        function generateBookingId() {
+            return 'BK' + Math.floor(100000000000 + Math.random() * 900000000000);
+        }
+
+        function saveBookingDetails() {
+            const bookingId = generateBookingId();
+            const user = localStorage.getItem("loggedInUser") || "defaultUser";
+
+            const data = {
+                bookingId: bookingId,
+                senderName: document.getElementById("senderName").value,
+                senderAddress: document.getElementById("senderAddress").value,
+                senderContact: document.getElementById("senderContact").value,
+                receiverName: document.getElementById("receiverName").value,
+                receiverAddress: document.getElementById("receiverAddress").value,
+                receiverPin: document.getElementById("receiverPin").value,
+                receiverContact: document.getElementById("receiverContact").value,
+                parcelSize: document.getElementById("parcelSize").value,
+                contentDesc: document.getElementById("contentDesc").value,
+                deliverySpeed: document.getElementById("deliverySpeed").value,
+                packaging: document.getElementById("packaging").value,
+                pickupDate: document.getElementById("pickupDate").value,
+                pickupTime: document.getElementById("pickupTime").value,
+                cost: document.getElementById("cost").value,
+                paymentMethod: document.getElementById("paymentMethod").value,
+                insurance: document.getElementById("insurance").checked,
+                tracking: document.getElementById("tracking").checked,
+                bookingDate: new Date().toISOString().split('T')[0],
+                status: "Booked"
+            };
+            localStorage.setItem("invReceiverName", document.getElementById("receiverName").value);
+            localStorage.setItem("invReceiverAddress", document.getElementById("receiverAddress").value);
+            localStorage.setItem("invReceiverPin", document.getElementById("receiverPin").value);
+            localStorage.setItem("invReceiverMobile", document.getElementById("receiverContact").value);
+            localStorage.setItem("invWeight", document.getElementById("parcelSize").value);
+            localStorage.setItem("invContents", document.getElementById("contentDesc").value);
+            localStorage.setItem("invDeliveryType", document.getElementById("deliverySpeed").value);
+            localStorage.setItem("invPackaging", document.getElementById("packaging").value);
+            localStorage.setItem("invPickupTime", document.getElementById("pickupTime").value);
+            localStorage.setItem("invServiceCost", document.getElementById("cost").value);
+
+            localStorage.setItem("currentBookingId", bookingId);
+            localStorage.setItem("bookingId", bookingId);
+
+            // Append to all bookings
+            const all = JSON.parse(localStorage.getItem("allBookings") || "[]");
+            all.push(data);
+            localStorage.setItem("allBookings", JSON.stringify(all));
+
+        function getExpectedDeliveryDate() {
+            const deliverySpeed = document.getElementById("deliverySpeed").value;
+            const today = new Date();
+            if (deliverySpeed === "express") {
+                today.setDate(today.getDate() + 2);
+            } else {
+                today.setDate(today.getDate() + 5);
+            }
+            return today.toISOString().split('T')[0];
+        }
+
+        }
+
+        
+    </script>
+</body>
+</html>
+
+<!-- booking.html -->

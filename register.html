@@ -1,0 +1,136 @@
+<!-- register.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body{
+            font-family: Arial, sans-serif;
+            background-color: #eef2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 500px;
+        }
+        .check{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+        }
+        #preference1{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+        }
+        #preference2{
+            padding: 7px;
+            text-align: left;
+            width: auto;
+            margin-left: 0;
+            display: inline;
+        }
+        .fakelink {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer; 
+        }
+        .ack { display: none; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Customer Registration</h2>
+        <form id="registerForm">
+            <fieldset>
+                <legend>Personal Information</legend>
+                <label for="custName">Customer Name:</label>
+                <input type="text" id="custName" maxlength="50" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="countryCode">Country Code:</label>
+                <select id="countryCode">
+                    <option value="91">+91</option>
+                    <option value="1">+1</option>
+                </select>
+
+                <label for="mobile">Mobile Number:</label>
+                <input type="text" id="mobile" maxlength="10" pattern="\d{10}" required>
+
+                <label for="address">Address:</label>
+                <textarea id="address" required></textarea>
+            </fieldset>
+
+            <fieldset>
+                <legend>Username and Password</legend>
+                <label for="userId">User Name:</label>
+                <input type="text" id="userId" minlength="5" maxlength="20" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" maxlength="30" required>
+                <p><small>Password must include uppercase, lowercase, and special character.</small></p>
+
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" id="confirmPassword" maxlength="30" required>
+            </fieldset>
+
+            <fieldset id="check">
+                <input type="checkbox" id="preference1" required>
+                <label for="preference1" id="preference2"> I agree to receive notifications and Emails.</label><br/>
+                <input type="checkbox" id="preference1" required>
+                <label for="preference1" id="preference2"> I have reviewed and agree to <span class="fakelink">privacy policy</span>.</label>
+            </fieldset>
+
+            <button type="button" onclick="register()">Register</button>
+            <button type="reset">Reset</button>
+        </form>
+
+        <div id="ack" class="ack">
+            <p class="success">Consumer Registration Successful.</p>
+            <p><strong>Username:</strong> <span id="genUsername"></span></p>
+            <p><strong>Name:</strong> <span id="genName"></span></p>
+            <p><strong>Email:</strong> <span id="genEmail"></span></p>
+            <p>To Login <a href="login.html">Login</a></p>
+        </div>
+    </div> 
+
+    <script>
+    function register() {
+      const name = document.getElementById('custName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const userId = document.getElementById('userId').value.trim();
+      const pass = document.getElementById('password').value;
+      const confirmPass = document.getElementById('confirmPassword').value;
+
+      if (pass !== confirmPass) {
+        alert('Passwords do not match!');
+        return;
+      }
+
+      // Simulate successful registration
+      const randomUsername = userId + Math.floor(Math.random() * 1000);
+
+      document.getElementById('genUsername').textContent = randomUsername;
+      document.getElementById('genName').textContent = name;
+      document.getElementById('genEmail').textContent = email;
+      document.getElementById('ack').style.display = 'block';
+
+      // Optionally hide the form
+      document.getElementById('registerForm').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
+<!-- register.html-->

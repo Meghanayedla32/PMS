@@ -1,0 +1,166 @@
+<!-- officer_home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Officer Home - Parcel Management</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    body {
+        background-color: #FFFEFE;
+        display: block;
+    }
+    .navigation li a {
+        color: black !important;
+        text-decoration: none; 
+    }
+
+    .navigation li a:hover {
+        color: #ff0000 !important; 
+    }
+    div.topbar {
+        background-color: #64c5e0;
+    }
+    img{
+        padding: 0%;
+        vertical-align: middle;
+        width: 100%;
+        box-sizing: border-box;
+    }
+        
+    main{   
+        background-image: url('images/hero-header-bg.png');
+        background-color: rgba(249, 250, 253, 0.145);
+        display: block;
+        unicode-bidi: isolate;
+        box-sizing: border-box;
+
+    }
+
+    .welcome {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .search-section, .list-section {
+      background-color: #fff;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    #statusResult {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <p class="welcome">Hello, <span id="displayUser">Officer</span>!</p>
+    <nav>
+      <ul class="navigation">
+        <li><a href="officer_home.html">Home</a></li>
+        <li><a href="tracking.html">Tracking</a></li>
+        <li><a href="delivery_status.html">Delivery Status</a></li>
+        <li><a href="pickup_schedule.html">Pickup Scheduling</a></li>
+        <li><a href="history_officer.html">Previous Booking</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+  <main>
+    <h2>Officer Dashboard</h2>
+    <p>Use the menu above to access operational tools and parcel management features.</p>
+    <img src="images/officers.jpg" alt="illustration" />
+    
+    <!-- Search Section -->
+    <div class="search-section">
+      <h3>Search Booking Status</h3>
+      <input type="text" id="searchCustomerId" placeholder="Enter Customer ID (Name)" />
+      <input type="text" id="searchBookingId" placeholder="Enter Booking ID" />
+      <button onclick="searchStatus()">Search</button>
+      <div id="statusResult"></div>
+    </div>
+
+    <!-- List of All Shipped Packages -->
+    <div class="list-section">
+      <h3>All Shipped Packages</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Sender Name</th>
+            <th>Parcel Size</th>
+            <th>Delivery Type</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="shippedTableBody"></tbody>
+      </table>
+    </div>
+    
+    
+  </main>
+  </div>
+
+  <script>
+    // Display Shipped Packages (Latest First)
+    const tableBody = document.getElementById("shippedTableBody");
+    const allBookings = JSON.parse(localStorage.getItem("allBookings") || "[]");
+    const shipped = allBookings.filter(b => b.status && b.status.toLowerCase() === "delivered");
+
+    shipped.sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate));
+
+    for (const booking of shipped) {
+      const row = `
+        <tr>
+          <td>${booking.bookingId}</td>
+          <td>${booking.senderName}</td>
+          <td>${booking.parcelSize}</td>
+          <td>${booking.deliverySpeed}</td>
+          <td>${booking.status}</td>
+          <td>${booking.bookingDate}</td>
+        </tr>`;
+      tableBody.innerHTML += row;
+    }
+
+    // Search Booking Status
+    function searchStatus() {
+      const customer = document.getElementById("searchCustomerId").value.trim().toLowerCase();
+      const bookingId = document.getElementById("searchBookingId").value.trim();
+      const statusDiv = document.getElementById("statusResult");
+
+      const match = allBookings.find(
+        b => b.bookingId === bookingId && b.receiverName.toLowerCase() === customer
+      );
+
+      if (match) {
+        statusDiv.innerText = `Status: ${match.status}`;
+        statusDiv.style.color = "green";
+      } else {
+        statusDiv.innerText = "No matching booking found.";
+        statusDiv.style.color = "red";
+      }
+    }
+  </script>
+</body>
+</html>
+<!-- officer_home.html -->

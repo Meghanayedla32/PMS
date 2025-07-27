@@ -1,0 +1,114 @@
+<!-- delivery_status.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delivery Status - Parcel Management</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="scripts.js" defer></script>
+</head>
+<body>
+  <div class="topbar">
+    <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+    <nav>
+      <ul>
+        <li><a href="officer_home.html">Home</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main>
+    <h2>Update Delivery Status</h2>
+    <form id="deliveryForm">
+      <label for="deliveryBookingId">Booking ID:</label>
+      <input type="text" id="deliveryBookingId" required placeholder="e.g. BK123456789012">
+      <button type="button" onclick="searchBookingForStatus()">Search</button>
+
+      <div id="statusSection" class="hidden">
+        <p><strong>Current Status:</strong> <span id="currentStatus">-</span></p>
+        <label for="statusUpdate">Update Status:</label>
+        <select id="statusUpdate" required>
+          <option value="">Select Status</option>
+          <option value="Picked Up">Picked Up</option>
+          <option value="In Transit">In Transit</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Returned">Returned</option>
+        </select>
+        <button type="submit">Save Status</button>
+      </div>
+
+      <div id="statusMessage"></div>
+    </form>
+  </main>
+  <script>
+    let selectedBookingStatus = null;
+
+    function searchBookingForStatus() {
+    const bookingIdInput = document.getElementById("deliveryBookingId").value.trim();
+    const messageDiv = document.getElementById("statusMessage");
+    const section = document.getElementById("statusSection");
+    const currentStatusSpan = document.getElementById("currentStatus");
+
+    if (!/^BK\d{12}$/i.test(bookingIdInput)) {
+        messageDiv.textContent = "Please enter a valid Booking ID (e.g., BK123456789012)";
+        messageDiv.style.color = "red";
+        section.classList.add("hidden");
+        return;
+    }
+
+    const bookings = JSON.parse(localStorage.getItem("allBookings") || "[]");
+    const match = bookings.find(b => b.bookingId.toLowerCase() === bookingIdInput.toLowerCase());
+
+    if (!match) {
+        messageDiv.textContent = "Booking ID not found.";
+        messageDiv.style.color = "red";
+        section.classList.add("hidden");
+        return;
+    }
+
+    selectedBookingStatus = match;
+    currentStatusSpan.textContent = match.status || "Booked";
+    section.classList.remove("hidden");
+    messageDiv.textContent = "";
+    }
+
+    document.getElementById("deliveryForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const newStatus = document.getElementById("statusUpdate").value;
+    const messageDiv = document.getElementById("statusMessage");
+
+    if (!selectedBookingStatus) {
+        messageDiv.textContent = "Please search for a valid Booking ID first.";
+        messageDiv.style.color = "red";
+        return;
+    }
+
+    if (!newStatus) {
+        messageDiv.textContent = "Please select a status.";
+        messageDiv.style.color = "red";
+        return;
+    }
+
+    const bookings = JSON.parse(localStorage.getItem("allBookings") || "[]");
+    const index = bookings.findIndex(b => b.bookingId === selectedBookingStatus.bookingId);
+
+    if (index !== -1) {
+        bookings[index].status = newStatus;
+        localStorage.setItem("allBookings", JSON.stringify(bookings));
+        messageDiv.textContent = "Status updated successfully!";
+        messageDiv.style.color = "green";
+        selectedBookingStatus = bookings[index];
+        document.getElementById("currentStatus").textContent = newStatus;
+    } else {
+        messageDiv.textContent = "Unexpected error. Booking not found.";
+        messageDiv.style.color = "red";
+    }
+    });
+
+  </script>
+</body>
+</html>
+<!-- delivery_status.html -->

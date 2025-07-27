@@ -1,0 +1,67 @@
+<!-- customer_home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Home - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+    <style>
+        body {
+                background-color: #FFFEFE;
+                display: block;
+        }
+        .navigation li a {
+            color: black !important;
+            text-decoration: none; 
+        }
+
+        .navigation li a:hover {
+            color: #ff0000 !important; 
+        }
+        div.topbar {
+            background-color: #ffcf79;
+        }
+        img{
+            padding: 0%;
+            vertical-align: middle;
+            width: 100%;
+            box-sizing: border-box;
+        }
+         
+        main{   
+            background-image: url('images/hero-header-bg.png');
+            background-color: rgba(249, 250, 253, 0.145);
+            display: block;
+            unicode-bidi: isolate;
+            box-sizing: border-box;
+
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul class="navigation">
+                <li><a href="customer_home.html">Home</a></li>
+                <li><a href="booking.html">Booking Service</a></li>
+                <li><a href="tracking.html">Tracking</a></li>
+                <li><a href="history.html">Previous Booking</a></li>
+                <li><a href="support.html">Contact Support</a></li>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+        
+    </div>
+    <div class="down">
+        <main>
+            <h2>Customer Dashboard</h2>
+            <p>Select a service from the menu above to proceed.</p>
+            <img src="images/hero.png" alt="illustration">
+        </main>
+    </div>
+</body>
+</html>
+<!-- customer_home.html -->

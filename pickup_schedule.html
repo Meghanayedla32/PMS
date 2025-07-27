@@ -1,0 +1,159 @@
+<!-- pickup_schedule.html  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pickup Scheduling - Parcel Management</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      padding: 20px;
+    }
+    .topbar {
+      background-color: #5ccbe3;
+      padding: 10px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 0 10px #ccc;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input, button {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+    #pickupMessage {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <p class="welcome">Hello, <span id="displayUser">Officer</span>!</p>
+    <nav>
+      <ul>
+        <li><a href="officer_home.html">Home</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main>
+    <h2>Schedule Pickup</h2>
+    <form id="pickupForm">
+      <label for="bookingIdSearch">Booking ID:</label>
+      <input type="text" id="bookingIdSearch" placeholder="Enter 12-digit Booking ID" required pattern="^BK\d{12}$" />
+
+      <button type="button" onclick="searchBookingForPickup()">Search</button>
+
+      <div id="pickupDetails" class="hidden">
+        <p><strong>Booking ID:</strong> <span id="displayBookingId"></span></p>
+        <p><strong>Customer Name:</strong> <span id="displayCustomerName"></span></p>
+        <p><strong>Customer Address:</strong> <span id="displayCustomerAddress"></span></p>
+        <p><strong>Customer's PickUp Date:</strong> <span id="displayCustomersPickUpDate"></span></p>
+        <p><strong>Customer's PickUp Time:</strong> <span id="displayCustomersPickUpTime"></span></p>
+
+        <label for="pickupDateTime">Pickup Date & Time:</label>
+        <input type="datetime-local" id="pickupDateTime" required />
+        <button type="submit">Save</button>
+      </div>
+
+      <div id="pickupMessage"></div>
+    </form>
+  </main>
+
+  <script>
+    let selectedBooking = null;
+
+    const pickupForm = document.getElementById("pickupForm");
+    const bookingIdInput = document.getElementById("bookingIdSearch");
+    const pickupDateTime = document.getElementById("pickupDateTime");
+    const pickupDetailsDiv = document.getElementById("pickupDetails");
+    const messageDiv = document.getElementById("pickupMessage");
+
+    
+    function searchBookingForPickup() {
+        const bookingId = bookingIdInput.value.trim();
+
+        if (!/^BK\d{12}$/i.test(bookingId)) {
+            messageDiv.textContent = "Please enter a valid Booking ID (e.g., BK123456789012)";
+            messageDiv.style.color = "red";
+            pickupDetailsDiv.classList.add("hidden");
+            return;
+        }
+
+        const bookings = JSON.parse(localStorage.getItem("allBookings") || "[]");
+
+        const booking = bookings.find(b => b.bookingId.toLowerCase() === bookingId.toLowerCase());
+
+        if (!booking) {
+            messageDiv.textContent = "Booking not found.";
+            messageDiv.style.color = "red";
+            pickupDetailsDiv.classList.add("hidden");
+            return;
+        }
+
+        selectedBooking = booking;
+        document.getElementById("displayBookingId").textContent = booking.bookingId;
+        document.getElementById("displayCustomerName").textContent = booking.receiverName;
+        document.getElementById("displayCustomerAddress").textContent = booking.receiverAddress;
+        document.getElementById("displayCustomersPickUpDate").textContent = booking.pickupDate;
+        document.getElementById("displayCustomersPickUpTime").textContent = booking.pickupTime;
+        
+
+        messageDiv.textContent = "";
+        pickupDetailsDiv.classList.remove("hidden");
+        }
+
+
+    pickupForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      if (!selectedBooking) {
+        messageDiv.textContent = "Please search and select a booking first.";
+        messageDiv.style.color = "red";
+        return;
+      }
+
+      const pickupTime = pickupDateTime.value;
+      if (!pickupTime) {
+        messageDiv.textContent = "Please enter a pickup date and time.";
+        messageDiv.style.color = "red";
+        return;
+      }
+
+      // Save pickup to booking
+      selectedBooking.pickupTime = pickupTime;
+
+      // Update in localStorage
+      let allBookings = JSON.parse(localStorage.getItem("allBookings") || "[]");
+      const index = allBookings.findIndex(b => b.bookingId === selectedBooking.bookingId);
+      if (index !== -1) {
+        allBookings[index] = selectedBooking;
+        localStorage.setItem("allBookings", JSON.stringify(allBookings));
+      }
+
+      messageDiv.textContent = "Pickup scheduled successfully.";
+      messageDiv.style.color = "green";
+      pickupDetailsDiv.classList.add("hidden");
+      pickupForm.reset();
+    });
+  </script>
+</body>
+</html>
+<!-- pickup_schedule.html  -->

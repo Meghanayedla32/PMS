@@ -1,0 +1,48 @@
+<!-- card_details.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Payment - Parcel Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
+</head>
+<body>
+    <div class="topbar">
+        <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="logout()">Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <h2><span id="displaycard"></span> Card</h2>
+        <form id="cardForm">
+
+            <label for="cardNo">Card Number:</label>
+            <input type="text" id="cardNo" maxlength="16" required>
+
+            <label for="cardHolder">Card Holder Name:</label>
+            <input type="text" id="cardHolder" required>
+
+            <label for="expiry">Expiry Date (MM/YY):</label>
+            <input type="text" id="expiry" pattern="\d{2}/\d{2}" required>
+
+            <label for="cvv">CVV:</label>
+            <input type="text" id="cvv" maxlength="3" required>
+
+            <button type="button" onclick="cardsubmit()">Make Payment</button>
+        </form>
+    </main>
+    <script>
+    function cardsubmit() {
+        window.location.href = 'invoice.html';
+
+    }
+    </script>
+</body>
+</html>
+<!-- card_details.html -->
