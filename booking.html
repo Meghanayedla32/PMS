@@ -247,6 +247,12 @@
             all.push(data);
             localStorage.setItem("allBookings", JSON.stringify(all));
 
+            localStorage.setItem(`booking_${bookingId}`, JSON.stringify({
+            status: "Booked",
+            lastUpdated: new Date().toISOString().split('T')[0],
+            expectedDelivery: getExpectedDeliveryDate()
+        }));
+
         function getExpectedDeliveryDate() {
             const deliverySpeed = document.getElementById("deliverySpeed").value;
             const today = new Date();
