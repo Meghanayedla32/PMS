@@ -1,0 +1,80 @@
+<!-- tracking_officer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tracking - Parcel Management</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="scripts.js" defer></script>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <p class="welcome">Hello, <span id="displayUser">User</span>!</p>
+    <nav>
+      <ul>
+        <li><a href="officer_home.html">Home</a></li>
+        <li><a href="#" onclick="logout()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main>
+    <h2>Track Your Parcel</h2>
+    <form id="trackingForm">
+      <label for="bookingId">Enter 12-digit Booking ID:</label>
+      <input type="text" id="bookingId" required />
+      <button type="submit">Search</button>
+    </form>
+
+    <div id="trackingResult" class="hidden">
+      <h3>Tracking Status</h3>
+      <p><strong>Status:</strong> <span id="status"></span></p>
+      <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
+      <p><strong>Expected Delivery:</strong> <span id="expectedDelivery"></span></p>
+    </div>
+  </main>
+
+  <script>
+    // Show user name if saved
+    const username = localStorage.getItem("username");
+    if (username) {
+      document.getElementById("displayUser").textContent = username;
+    }
+
+    // Handle tracking search
+    const trackingForm = document.getElementById("trackingForm");
+    const resultDiv = document.getElementById("trackingResult");
+
+    trackingForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const bid = document.getElementById("bookingId").value.trim();
+
+      // Validate format
+      if (!/^BK\d{12}$/.test(bid)) {
+        alert("Please enter a valid 12-digit Booking ID.");
+        return;
+      }
+
+      const booking = localStorage.getItem(`booking_${bid}`);
+      if (booking) {
+        const data = JSON.parse(booking);
+        document.getElementById("status").textContent = data.status;
+        document.getElementById("lastUpdated").textContent = data.lastUpdated;
+        document.getElementById("expectedDelivery").textContent = data.expectedDelivery;
+        resultDiv.classList.remove("hidden");
+      } else {
+        alert("No booking found with that ID.");
+        resultDiv.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+</html>
+
+<!-- tracking_officer.html -->
